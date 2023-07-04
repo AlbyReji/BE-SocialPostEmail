@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Post{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Posts</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    {% if user.is_authenticated %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active" style="margin-left: 1300px;">
+          <a class="nav-link" href="{% url 'addpost' %}">Add Post <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'logout' %}">Logout <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+    </div>
+    {% endif %}
+  </nav>
+
+
+  <h1>Post List</h1>
+
+  <div class="row row-cols-1 row-cols-md-3">
+    {% for st in post %}
+    <div class="col mb-4">
+      <div class="card h-100">
+        <img src="{{ st.image.url }}" class="card-img-top" alt="..." style="object-fit: cover; height: 200px;">
+        <div class="card-body">
+          <h5 class="card-title">{{ st.caption }}</h5>
+          <p class="card-text">{{ st.description }}</p>
+          <p class="card-text"><small class="text-muted">{{ st.created_date }}</small></p>
+          <div class="btn-group">
+            <a href="{% url 'editpost' st.postid %}" class="btn btn-primary">Edit</a>
+            <form action="{% url 'delete' st.postid %}" method="POST" style="display: inline;">  
+              {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  
+  
+
+
+{% endblock %}
+
